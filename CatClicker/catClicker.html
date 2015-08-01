@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Cat clicker</title>
+</head>
+
+<body>
+	<h1>Cat clicker</h1>
+	<div>
+		<div style="float: left;">
+			<ul id="catList"></ul>
+		</div>
+		<div style="float: left;" id="catContainer">		
+			<img id="catImg"></img>
+			<span id="catCounter"></span>
+		</div>
+	</div>
+	<button id="adminButton">Admin</button>
+	<div id="adminArea">
+		Name: <input type="text" id="adminCatName"></input>
+		Img: <input id="adminCatImg"></input>
+		Clicks: <input id="adminCatClicks"></input>
+		<button id="adminCancel">Cancel</button>
+		<button id="adminSave">Save</button>
+	</div>
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="js/app.js"></script>
+
+</html>
