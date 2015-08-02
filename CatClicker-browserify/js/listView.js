@@ -1,12 +1,14 @@
 var broker = require('./broker');
 
+var catList = $('#catList');
+
 var render = function(cats) {
-	$('#catList').html('');
+	catList.html('');
 
 	cats.forEach(function(cat) {
 		var link = $("<a href='#'></a").append(cat.name);
 		var li = $("<li></li>").append(link);
-		$('#catList').append(li);
+		catList.append(li);
 
 	 	link.click(function() {
 	 		broker.send('catSelected', this);

@@ -1,7 +1,7 @@
 var broker = require('./broker.js');
 
-var catCounter = $('#catCounter');
-var catImg = $('#catImg');
+var catCounter = $('#catCounter'),
+	catImg = $('#catImg');
 
 catImg.click(function() {
 	broker.send('catClicked');

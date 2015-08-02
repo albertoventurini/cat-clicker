@@ -2,7 +2,7 @@ var broker = require('./broker')
 var catRepository = require('./catRepository');
 var listView = require('./listView');
 var mainView = require('./mainView');
-
+var adminView = require('./adminView');
 
 var selectedCat = {};
 
@@ -16,12 +16,17 @@ var init = function() {
 
 var onCatSelected = function(cat) {
 	selectedCat = cat;
-	mainView.render(cat);
+	renderViews();
 };
 
 var onCatClicked = function() {
 	selectedCat.clicks++;
-	mainView.render(selectedCat);	
+	renderViews();
+};
+
+var renderViews = function() {
+	mainView.render(selectedCat);
+	adminView.render(selectedCat);
 };
 
 module.exports = {
