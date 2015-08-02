@@ -1,7 +1,7 @@
 var broker = require('./broker')
 var catRepository = require('./catRepository');
-var catListView = require('./catListView');
-var catMainView = require('./catMainView');
+var listView = require('./listView');
+var mainView = require('./mainView');
 
 
 var selectedCat = {};
@@ -11,17 +11,17 @@ var init = function() {
 	broker.register('catClicked', onCatClicked);
 
 	var cats = catRepository.getCats();
-	catListView.render(cats);
+	listView.render(cats);
 };
 
 var onCatSelected = function(cat) {
 	selectedCat = cat;
-	catMainView.render(cat);
+	mainView.render(cat);
 };
 
 var onCatClicked = function() {
 	selectedCat.clicks++;
-	catMainView.render(selectedCat);	
+	mainView.render(selectedCat);	
 };
 
 module.exports = {
