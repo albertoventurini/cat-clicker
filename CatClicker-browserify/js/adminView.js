@@ -1,3 +1,5 @@
+var broker = require('./broker');
+
 var adminButton = $('#adminButton'),
 	adminArea = $('#adminArea'),
 	adminCatName = $('#adminCatName'),
@@ -5,20 +7,20 @@ var adminButton = $('#adminButton'),
 	adminCatClicks = $('#adminCatClicks'),
 	adminCancel = $('#adminCancel'),
 	adminSave = $('#adminSave'),
-	hidden = true;
+	hidden = true,
+	originalCat = {};
 
 init();
 
 function init() {
-	updateVisibility();
-
-	adminButton.click(function() {
-		hidden = !hidden;
-		updateVisibility();
-	});
+	adminArea.hide();
+	adminButton.click(toggleVisibility);
+	adminSave.click(save);
+	adminCancel.click(cancel);
 };
 
-function updateVisibility() {
+function toggleVisibility() {
+	hidden = !hidden;
 	if(hidden)
 		adminArea.hide();
 	else
@@ -26,6 +28,23 @@ function updateVisibility() {
 };
 
 function render(cat) {
+	originalCat = cat;
+	updateFields(cat);
+};
+
+function save() {
+	broker.send('catChanged', {
+		name: adminCatName.val(),
+		img: adminCatImg.val(),
+		clicks: adminCatClicks.val()
+	});
+};
+
+function cancel() {
+	updateFields(originalCat);
+};
+
+function updateFields(cat) {
 	adminCatName.val(cat.name);
 	adminCatImg.val(cat.img);
 	adminCatClicks.val(cat.clicks);

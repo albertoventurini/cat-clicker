@@ -7,9 +7,7 @@ var Cat = function(name) {
 
 module.exports = Cat;
 },{}],2:[function(require,module,exports){
-module.exports = {
-	render: render
-};
+var broker = require('./broker');
 
 var adminButton = $('#adminButton'),
 	adminArea = $('#adminArea'),
@@ -18,20 +16,20 @@ var adminButton = $('#adminButton'),
 	adminCatClicks = $('#adminCatClicks'),
 	adminCancel = $('#adminCancel'),
 	adminSave = $('#adminSave'),
-	hidden = true;
+	hidden = true,
+	originalCat = {};
 
 init();
 
 function init() {
-	updateVisibility();
-
-	adminButton.click(function() {
-		hidden = !hidden;
-		updateVisibility();
-	});
+	adminArea.hide();
+	adminButton.click(toggleVisibility);
+	adminSave.click(save);
+	adminCancel.click(cancel);
 };
 
-function updateVisibility() {
+function toggleVisibility() {
+	hidden = !hidden;
 	if(hidden)
 		adminArea.hide();
 	else
@@ -39,13 +37,32 @@ function updateVisibility() {
 };
 
 function render(cat) {
+	originalCat = cat;
+	updateFields(cat);
+};
+
+function save() {
+	broker.send('catChanged', {
+		name: adminCatName.val(),
+		img: adminCatImg.val(),
+		clicks: adminCatClicks.val()
+	});
+};
+
+function cancel() {
+	updateFields(originalCat);
+};
+
+function updateFields(cat) {
 	adminCatName.val(cat.name);
 	adminCatImg.val(cat.img);
 	adminCatClicks.val(cat.clicks);
 };
 
-
-},{}],3:[function(require,module,exports){
+module.exports = {
+	render: render
+};
+},{"./broker":3}],3:[function(require,module,exports){
 var callbacks = {};
 
 var register = function(message, callback) {
@@ -85,13 +102,15 @@ var listView = require('./listView');
 var mainView = require('./mainView');
 var adminView = require('./adminView');
 
+var cats = [];
 var selectedCat = {};
 
 var init = function() {
 	broker.register('catSelected', onCatSelected);
 	broker.register('catClicked', onCatClicked);
+	broker.register('catChanged', onCatChanged);
 
-	var cats = catRepository.getCats();
+	cats = catRepository.getCats();
 	listView.render(cats);
 };
 
@@ -105,7 +124,15 @@ var onCatClicked = function() {
 	renderViews();
 };
 
+var onCatChanged = function(catData) {
+	selectedCat.name = catData.name;
+	selectedCat.img = catData.img;
+	selectedCat.clicks = catData.clicks;
+	renderViews();
+};
+
 var renderViews = function() {
+	listView.render(cats);
 	mainView.render(selectedCat);
 	adminView.render(selectedCat);
 };
